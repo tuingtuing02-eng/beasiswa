@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard Informasi Beasiswa PPDS FK Unhas</title>
+<style>
+  :root {
+    --border: #e2e8f0; --text: #0f172a; --muted: #64748b; --muted2: #94a3b8;
+    --maroon: #7a1e2b; --gold: #c9a227; --teal: #0d9488; --blue: #1d4ed8;
+    box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f8fafc; color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  /* Top nav between sections */
+  .quicknav { display:flex; gap:10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .quicknav a { text-decoration:none; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; border:1px solid var(--border); color:var(--muted); background:#fff; }
+  .quicknav a:hover { background:#f1f5f9; }
+
+  header.page-head { margin-bottom: 24px; }
+  header.page-head h1 { font-size: clamp(21px, 3.4vw, 28px); margin: 0 0 6px; font-weight: 800; letter-spacing: -0.02em; }
+  header.page-head p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  .section { margin-bottom: 36px; }
+  .section-banner {
+    border-radius: 18px; padding: 22px 24px; color: #fff; margin-bottom: 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .section-banner.lpdp { background: linear-gradient(135deg, #7a1e2b 0%, #a3283a 60%, #c9a227 130%); }
+  .section-banner.kemkes { background: linear-gradient(135deg, #0f766e 0%, #0891b2 100%); }
+  .section-banner .stag { display:inline-block; font-size: 11px; font-weight: 800; letter-spacing:.06em; background: rgba(255,255,255,.18); padding: 4px 11px; border-radius: 999px; margin-bottom: 8px; }
+  .section-banner h2 { margin: 0 0 4px; font-size: clamp(18px, 2.6vw, 23px); font-weight: 800; }
+  .section-banner p { margin: 0; font-size: 13px; opacity: .92; }
+  .section-banner .badge-round { background: rgba(255,255,255,.15); border-radius: 14px; padding: 10px 16px; text-align:center; min-width:110px; }
+  .section-banner .badge-round .n { font-size: 22px; font-weight: 800; }
+  .section-banner .badge-round .l { font-size: 10.5px; opacity: .85; text-transform:uppercase; letter-spacing:.04em; }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+  @media (max-width: 800px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  .kpi { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 15px 17px; border-top: 3px solid var(--accent, var(--maroon)); }
+  .kpi .label { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+  .kpi .value { font-size: 23px; font-weight: 800; margin-top: 5px; color: var(--accent, var(--maroon)); }
+  .kpi .sub { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+  .card h3 { font-size: 14.5px; margin: 0 0 14px; font-weight: 700; }
+
+  /* Process steps */
+  .proses { display:flex; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+  .proses .step { flex:1 1 200px; display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px 14px; }
+  .proses .step .num { width:30px; height:30px; border-radius:999px; background:var(--maroon); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; flex-shrink:0; }
+  .proses .step .txt { font-size:12.5px; font-weight:700; color:var(--text); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 36px; }
+  .timeline::before { content:''; position:absolute; left: 13px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .t-item { position: relative; padding-bottom: 20px; }
+  .t-item:last-child { padding-bottom: 0; }
+  .t-dot { position:absolute; left: -36px; top: 2px; width: 28px; height: 28px; border-radius: 999px; background: #f1f5f9; border: 2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color: var(--muted); }
+  .t-item.highlight .t-dot { background: var(--maroon); border-color: var(--maroon); color: #fff; }
+  .t-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .t-item.highlight .t-title { color: var(--maroon); }
+  .t-date { font-size: 12.5px; font-weight: 600; color: var(--gold); display:flex; align-items:center; gap:5px; margin-bottom: 2px; }
+  .t-desc { font-size: 12.5px; color: var(--muted); }
+
+  .note-box { background:#fffbeb; border:1px solid #fde68a; border-radius:12px; padding:14px 16px; font-size:12.5px; color:#78350f; margin-top: 6px; line-height:1.6; }
+  .note-box b { color:#92400e; }
+
+  .cta-link { display:inline-flex; align-items:center; gap:8px; background:#0f172a; color:#fff; text-decoration:none; padding:11px 18px; border-radius:11px; font-size:13.5px; font-weight:700; }
+  .cta-link:hover { background:#1e293b; }
+
+  /* Kemenkes stat table */
+  .kk-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 820px) { .kk-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .kk-grid { grid-template-columns: 1fr; } }
+  .kk-card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:16px 18px; }
+  .kk-card .kk-label { font-size: 12px; font-weight:700; color: var(--muted); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .kk-card .kk-total { font-size: 26px; font-weight:800; color: var(--teal); margin-bottom: 10px; }
+  .kk-row { display:flex; justify-content:space-between; align-items:center; padding: 5px 0; font-size: 12px; }
+  .kk-row .kk-tag { font-weight:700; color:#0f172a; }
+  .kk-row .kk-pills { display:flex; gap:6px; }
+  .kk-pill { font-size: 10.5px; font-weight:700; padding: 2px 8px; border-radius: 999px; }
+  .kk-pill.baru { background:#dbeafe; color:#1d4ed8; }
+  .kk-pill.ongoing { background:#1e293b; color:#fff; }
+  .kk-divider { border-top: 1px dashed var(--border); margin: 6px 0; }
+  .draft-tag { display:inline-block; margin-top:8px; font-size:11px; font-weight:800; background:#fef3c7; color:#92400e; padding:4px 10px; border-radius:999px; }
+
+  .info-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 820px) { .info-grid { grid-template-columns: 1fr; } }
+  .info-card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:16px 18px; }
+  .info-card .ic-head { font-size:13px; font-weight:800; color: var(--teal); margin-bottom:6px; }
+  .info-card p { margin:0; font-size:12.5px; color:var(--muted); line-height:1.6; }
+
+  footer { margin-top: 30px; text-align: center; color: var(--muted2); font-size: 12px; line-height: 1.7; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-head">
+    <h1>Dashboard Informasi Beasiswa PPDS FK Unhas</h1>
+    <p>Jadwal seleksi Beasiswa LPDP dan rekapitulasi Beasiswa Kemenkes untuk Dokter Spesialis &amp; Subspesialis 2026</p>
+  </header>
+
+  <div class="quicknav">
+    <a href="#lpdp">🎓 Beasiswa LPDP</a>
+    <a href="#kemkes">🩺 Beasiswa Kemenkes</a>
+  </div>
+
+  <!-- ================= LPDP SECTION ================= -->
+  <section class="section" id="lpdp">
+    <div class="section-banner lpdp">
+      <div>
+        <span class="stag">FK UNHAS &times; LPDP</span>
+        <h2>Tahapan &amp; Jadwal Seleksi Beasiswa LPDP</h2>
+        <p>Dokter Spesialis &amp; Subspesialis 2026</p>
+      </div>
+      <div class="badge-round"><div class="n">11</div><div class="l">Tahapan Seleksi</div></div>
+    </div>
+
+    <section class="kpis">
+      <div class="kpi" style="--accent:#7a1e2b;"><div class="label">PERIODE PENDAFTARAN</div><div class="value" style="font-size:16px;">30 Jun – 31 Jul 2026</div><div class="sub">Pendaftaran online via portal LPDP</div></div>
+      <div class="kpi" style="--accent:#c9a227;"><div class="label">PENGUMUMAN ADMINISTRASI</div><div class="value" style="font-size:16px;">28 Agustus 2026</div><div class="sub">Melalui portal LPDP</div></div>
+      <div class="kpi" style="--accent:#0d9488;"><div class="label">SELEKSI BAKAT SKOLASTIK</div><div class="value" style="font-size:16px;">29 Sep – 4 Okt 2026</div><div class="sub">Tes potensi akademik online</div></div>
+      <div class="kpi" style="--accent:#1d4ed8;"><div class="label">PERKULIAHAN PALING CEPAT</div><div class="value" style="font-size:16px;">Januari 2027</div><div class="sub">Sesuai kalender akademik PT</div></div>
+    </section>
+
+    <div class="proses">
+      <div class="step"><div class="num">1</div><div class="txt">Seleksi Administrasi</div></div>
+      <div class="step"><div class="num">2</div><div class="txt">Seleksi Bakat Skolastik</div></div>
+      <div class="step"><div class="num">3</div><div class="txt">Seleksi Substansi</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Rincian Tahapan &amp; Jadwal</h3>
+      <div class="timeline" id="lpdpTimeline"></div>
+      <div class="note-box">
+        <b>Catatan:</b><br>
+        *) Pengajuan Sanggah dilakukan jika diperlukan.<br>
+        **) Simulasi &amp; Seleksi Bakat Skolastik wajib diikuti oleh seluruh peserta yang lolos seleksi administrasi.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= KEMENKES SECTION ================= -->
+  <section class="section" id="kemkes">
+    <div class="section-banner kemkes">
+      <div>
+        <span class="stag">KEMENKES &times; PPDS FK UNHAS</span>
+        <h2>Beasiswa Kemenkes untuk Mahasiswa PPDS</h2>
+        <p>Bantuan Biaya Pendidikan Dokter Spesialis–Subspesialis / Dokter Gigi Spesialis–Subspesialis</p>
+      </div>
+      <a class="cta-link" href="https://sibk.kemkes.go.id/" target="_blank" rel="noopener noreferrer">🌐 sibk.kemkes.go.id</a>
+    </div>
+
+    <section class="kpis">
+      <div class="kpi" style="--accent:#0f766e;"><div class="label">PERIODE PENDAFTARAN</div><div class="value" style="font-size:16px;">15 – 31 Juli 2026</div><div class="sub">Tahun Pendaftaran 2026</div></div>
+      <div class="kpi" style="--accent:#0891b2;"><div class="label">JUMLAH PENDAFTAR</div><div class="value">1.799</div><div class="sub">Draft: 1.785 belum submit</div></div>
+      <div class="kpi" style="--accent:#2563eb;"><div class="label">KIRIM BERKAS</div><div class="value">14</div><div class="sub">Dari total pendaftar</div></div>
+      <div class="kpi" style="--accent:#7c3aed;"><div class="label">PENERIMA BANTUAN</div><div class="value">0</div><div class="sub">Masih dalam proses seleksi</div></div>
+    </section>
+
+    <div class="card">
+      <h3>Progres Seleksi per Tahapan (Tahun 2026)</h3>
+      <div class="kk-grid" id="kkGrid"></div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="ic-head">📋 Tentang Beasiswa</div>
+        <p>Beasiswa Kemenkes diberikan untuk mendukung pendidikan dokter spesialis dan subspesialis di fasilitas pendidikan terakreditasi.</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">🎯 Tujuan</div>
+        <p>Meningkatkan kualitas dan pemerataan tenaga kesehatan spesialis di seluruh Indonesia sesuai kebutuhan pelayanan kesehatan.</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">ℹ️ Informasi Penting</div>
+        <p>Data diperbarui secara berkala melalui Sistem Informasi Beasiswa Kesehatan Kementerian Kesehatan RI (SIBK).</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Sumber: Infografis Tahapan &amp; Jadwal Seleksi Beasiswa LPDP Dokter Spesialis &amp; Subspesialis 2026 (FK Unhas) dan Infografis Beasiswa Kemenkes untuk Mahasiswa PPDS FK Unhas.<br>
+    Kontak Kemenkes: beasiswa.kemkes.go.id &middot; beasiswakemkes@kemkes.go.id &middot; IG @beasiswa_kemkes
+  </footer>
+</div>
+
+<script>
+const LPDP_STAGES = [
+  { no: "01", title: "Pendaftaran Seleksi", date: "30 Juni – 31 Juli 2026", desc: "Pendaftaran online melalui portal LPDP", hl: false },
+  { no: "02", title: "Seleksi Administrasi", date: "3 – 27 Agustus 2026", desc: "Verifikasi kelengkapan dan kesesuaian dokumen", hl: false },
+  { no: "03", title: "Pengumuman Hasil Seleksi Administrasi", date: "28 Agustus 2026", desc: "Pengumuman melalui portal LPDP", hl: true },
+  { no: "04", title: "Pengajuan Sanggah *)", date: "29 Agustus – 1 September 2026", desc: "Melalui portal LPDP", hl: false },
+  { no: "05", title: "Pengumuman Hasil Sanggah", date: "22 September 2026", desc: "Pengumuman melalui portal LPDP", hl: true },
+  { no: "06", title: "Simulasi Seleksi Bakat Skolastik **)", date: "27 – 28 September 2026", desc: "Persiapan sebelum pelaksanaan seleksi", hl: false },
+  { no: "07", title: "Seleksi Bakat Skolastik **)", date: "29 September – 4 Oktober 2026", desc: "Tes potensi akademik secara online", hl: false },
+  { no: "08", title: "Pengumuman Hasil Seleksi Bakat Skolastik", date: "9 Oktober 2026", desc: "Pengumuman melalui portal LPDP", hl: true },
+  { no: "09", title: "Seleksi Substansi", date: "14 Oktober – 20 November 2026", desc: "Wawancara & penilaian substansi", hl: false },
+  { no: "10", title: "Pengumuman Hasil Seleksi Substansi", date: "30 November 2026", desc: "Pengumuman melalui portal LPDP", hl: true },
+  { no: "11", title: "Periode Perkuliahan Paling Cepat", date: "Bulan Januari 2027", desc: "Sesuai kalender akademik perguruan tinggi", hl: false },
+];
+
+document.getElementById('lpdpTimeline').innerHTML = LPDP_STAGES.map(s => `
+  <div class="t-item ${s.hl ? 'highlight' : ''}">
+    <div class="t-dot">${s.no}</div>
+    <div class="t-title">${s.title}</div>
+    <div class="t-date">📅 ${s.date}</div>
+    <div class="t-desc">${s.desc}</div>
+  </div>
+`).join('');
+
+const KK_STAGES = [
+  { label: "Jumlah Pendaftar", total: 1799, spesialis: {baru:0, ongoing:0}, subspesialis: {baru:0, ongoing:0}, draft: 1785 },
+  { label: "Jumlah Kirim Berkas", total: 14, spesialis: {baru:0, ongoing:0}, subspesialis: {baru:0, ongoing:0} },
+  { label: "Lulus Seleksi UPT Kemenkes/Kemenhan–TNI/POLRI/Dinkes Provinsi", total: 0, spesialis: {baru:0, ongoing:0}, subspesialis: {baru:0, ongoing:0} },
+  { label: "Jumlah Seleksi Tingkat Pusat", total: 0, spesialis: {baru:0, ongoing:0}, subspesialis: {baru:0, ongoing:0} },
+  { label: "Jumlah Seleksi Tingkat Fakultas", total: 0, spesialis: {baru:0, ongoing:0}, subspesialis: {baru:0, ongoing:0} },
+  { label: "Jumlah Penerima Bantuan Pendidikan", total: 0, spesialis: {baru:0, ongoing:0}, subspesialis: {baru:0, ongoing:0} },
+];
+
+document.getElementById('kkGrid').innerHTML = KK_STAGES.map(k => `
+  <div class="kk-card">
+    <div class="kk-label">${k.label}</div>
+    <div class="kk-total">${k.total.toLocaleString('id-ID')}</div>
+    <div class="kk-row"><span class="kk-tag">Spesialis</span><span class="kk-pills"><span class="kk-pill baru">Baru: ${k.spesialis.baru}</span><span class="kk-pill ongoing">Ongoing: ${k.spesialis.ongoing}</span></span></div>
+    <div class="kk-divider"></div>
+    <div class="kk-row"><span class="kk-tag">Subspesialis</span><span class="kk-pills"><span class="kk-pill baru">Baru: ${k.subspesialis.baru}</span><span class="kk-pill ongoing">Ongoing: ${k.subspesialis.ongoing}</span></span></div>
+    ${k.draft ? `<div class="draft-tag">Draft belum submit: ${k.draft}</div>` : ''}
+  </div>
+`).join('');
+</script>
+</body>
+</html>
